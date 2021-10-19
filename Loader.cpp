@@ -1,28 +1,108 @@
 
 #include <iostream>
 
-int  menuChoice ();
-void getUserData		(std::string& username, std::string& password);
-void signup				(std::string& username, std::string& password);
-void login				(const std::string& username, const std::string& password);
-bool checkLogin			(const std::string& username, const std::string& password, const std::string& loginUsername, const std::string& loginPassword);
+class Loader {
+private : 
+	std::string m_username{ " " };
+	std::string m_password{ " " };
+
+public :
+	int menuChoice() { 
+		int choice{};
+		std::cout << "\n\n1. Register 2. Login 3. Exit\n";
+		std::cin >> choice;
+		return choice;
+	}
+
+	std::string setUsername() {
+		std::string userName{ " " };
+		std::cout << "\nEnter username : ";
+		std::cin >> userName;
+		return userName;
+	}
+
+	std::string setPassword() {
+		std::string password{ " " };
+		std::cout << "\nEnter password : ";
+		std::cin >> password;
+		return password;
+	}
+
+	void setUserData(std::string& username, std::string& password) {
+		username = setUsername();
+		password = setPassword();
+	}
+
+	void signup() {
+		std::cout << "\nREGISTER";
+		setUserData(m_username, m_password);
+	}
+
+	void login() {
+
+		std::string loginUsername{ "" };
+		std::string loginPassword{ "" }; 
+
+		std::cout << "\nLOGIN\n";
+		setUserData(loginUsername, loginPassword);
+
+		if (checkLogin(m_username, m_password, loginUsername, loginPassword)) {
+			std::cout << "\nLogin Success! Welcome " << m_username;
+		}
+		else {
+			std::cout << "\nLogin failiure! Returning to menu \n";
+		}
+
+	}
+
+	bool checkLogin(const std::string& username, const std::string& password, std::string& loginUsername, std::string& loginPassword) { // Checks if login saved from signup is the same one user entered - You could possibly just put this in login function
+
+		short loginAttempts = 3;
+
+		while ((loginUsername != username || loginPassword != password) && loginAttempts > 0) {
+
+
+			if (loginAttempts == 3) {
+				std::cout << "\nInvalid login. Please re-enter username and password\n";
+				std::cin >> loginUsername >> loginPassword;
+			}
+			else if (loginAttempts > 1 && loginAttempts != 3) {
+				std::cout << "\n" << loginAttempts << " remaining attemps \n";
+				std::cin >> loginUsername >> loginPassword;
+			}
+			else {
+				std::cout << "\nFinal Attempt\n";
+				std::cin >> loginUsername >> loginPassword;
+			}
+
+			--loginAttempts;
+		}
+
+		if (loginUsername == username && loginPassword == password) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+};
+
 
 int main(){
 
-	std::string username{ "" };
-	std::string password{ "" };
-	
+	Loader Loader;
 	char repeat{ 'Y' };
 
 	while (repeat == 'Y') {
 
-		switch (menuChoice()) {
+		switch (Loader.menuChoice()) {
 
 		case 1:
-			signup(username, password);
+			Loader.signup();
 			break;
 		case 2:
-			login(username, password); // If we wanted to do something while user was logged in, we could store the results of login success in a bool and if its true call things in main, or even in this case
+			Loader.login(); 
 			break;
 		default:
 			repeat = 'N';
@@ -34,83 +114,5 @@ int main(){
 
 
 
-int menuChoice() { // Unneeded since this is exclusive to the one loader menu, but it looks cleaner
-		
-		int choice{};
-	
-		std::cout << "\n\n1. Register 2. Login 3. Exit\n";
 
-		std::cin  >> choice;
-
-		return choice;
-
-	}
-
-void getUserData(std::string& username, std::string& password) {
-
-	std::cout << "\nEnter username : ";
-
-	std::cin >> username;
-
-	std::cout << "\nEnter password : ";
-
-	std::cin >> password;
-
-}
-
-void signup(std::string& username, std::string& password){
-
-	std::cout << "\nREGISTER";
-
-	getUserData(username, password);
-
-}
-
-void login (const std::string& username, const std::string& password) {
-
-	std::string loginUsername{""};
-	std::string loginPassword{""}; // We could put this in main, but these vars are exclusive to the login function and arent used anywhere else and cant be used anywhere else really, so its best to just leave them in here
-
-	std::cout << "\nLOGIN\n";
-	getUserData(loginUsername, loginPassword);
-
-	if (checkLogin(username, password, loginUsername, loginPassword)) {
-		std::cout << "\nLogin Success! Welcome " << username;
-	}
-	else {
-		std::cout << "\nLogin failiure! Returning to menu \n";
-	}
-
-}
-
-bool checkLogin(const std::string& username, const std::string& password, const std::string& loginUsername, const std::string& loginPassword) { // Checks if login saved from signup is the same one user entered - You could possibly just put this in login function
-
-	short loginAttempts = 3;
-
-	while ((loginUsername != username || loginPassword != password) && loginAttempts > 0) {
-
-
-		if (loginAttempts == 3) {
-			std::cout << "\nInvalid login. Please re-enter username and password\n";
-			std::cin >> loginUsername >> loginPassword;
-		}
-		else if (loginAttempts > 1 && loginAttempts != 3) {
-			std::cout << "\n" << loginAttempts << " remaining attemps \n";
-			std::cin >> loginUsername >> loginPassword;
-		}
-		else {
-			std::cout << "\nFinal Attempt\n";
-			std::cin >> loginUsername >> loginPassword;
-		}
-
-		--loginAttempts;
-	}
-
-	if (loginUsername == username && loginPassword == password) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
+// You could probably make user into a class with private members username and password poublic signup while functions login will be external functions that use the class
