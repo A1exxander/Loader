@@ -91,21 +91,21 @@ public :
 
 int main(){
 
-	Loader Loader;
-	char repeat{ 'Y' };
+	Loader loader;
+	bool repeat{ true };
 
-	while (repeat == 'Y') {
+	while (repeat) {
 
-		switch (Loader.menuChoice()) {
+		switch (loader.menuChoice()) {
 
 		case 1:
-			Loader.signup();
+			loader.signup();
 			break;
 		case 2:
-			Loader.login(); 
+			loader.login(); 
 			break;
 		default:
-			repeat = 'N';
+			repeat = false;
 
 		}
 	}
