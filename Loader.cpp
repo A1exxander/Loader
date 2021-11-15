@@ -117,5 +117,3 @@ int main(){
 
 
 
-
-// You could probably make user into a class with private members username and password poublic signup while functions login will be external functions that use the class
