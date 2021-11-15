@@ -39,20 +39,23 @@ public :
 	}
 
 	void login() {
+		if (username && password != " "){
+			std::string loginUsername{ "" };
+			std::string loginPassword{ "" }; 
 
-		std::string loginUsername{ "" };
-		std::string loginPassword{ "" }; 
-
-		std::cout << "\nLOGIN\n";
-		setUserData(loginUsername, loginPassword);
-
-		if (checkLogin(m_username, m_password, loginUsername, loginPassword)) {
-			std::cout << "\nLogin Success! Welcome " << m_username;
+			std::cout << "\nLOGIN\n";
+			setUserData(loginUsername, loginPassword);
+		
+			if (checkLogin(m_username, m_password, loginUsername, loginPassword)) {
+				std::cout << "\nLogin Success! Welcome " << m_username;
+			}
+			else 	{
+				std::cout << "\nLogin failiure! Returning to menu \n";
+			}
 		}
 		else {
-			std::cout << "\nLogin failiure! Returning to menu \n";
+			std::cout << "\nNo Registered users!\n";
 		}
-
 	}
 
 	bool checkLogin(const std::string& username, const std::string& password, std::string& loginUsername, std::string& loginPassword) { // Checks if login saved from signup is the same one user entered - You could possibly just put this in login function
